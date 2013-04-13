@@ -133,6 +133,7 @@ public class KnowSQLParser extends Parser {
 	public final SelectContext select() throws RecognitionException {
 		SelectContext _localctx = new SelectContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_select);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -140,8 +141,15 @@ public class KnowSQLParser extends Parser {
 			setState(24); column_select();
 			setState(25); match(FROM);
 			setState(26); ((SelectContext)_localctx).bucket = match(ID);
-			setState(27); match(WHERE);
-			setState(28); where_clause();
+			setState(29);
+			_la = _input.LA(1);
+			if (_la==WHERE) {
+				{
+				setState(27); match(WHERE);
+				setState(28); where_clause();
+				}
+			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -156,6 +164,8 @@ public class KnowSQLParser extends Parser {
 	}
 
 	public static class Column_selectContext extends ParserRuleContext {
+		public Token ID;
+		public List<Token> cols = new ArrayList<Token>();
 		public TerminalNode ID(int i) {
 			return getToken(KnowSQLParser.ID, i);
 		}
@@ -186,28 +196,30 @@ public class KnowSQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(39);
+			setState(40);
 			switch (_input.LA(1)) {
 			case SPLAT:
 				{
-				setState(30); match(SPLAT);
+				setState(31); match(SPLAT);
 				}
 				break;
 			case ID:
 				{
 				{
-				setState(31); match(ID);
-				setState(36);
+				setState(32); ((Column_selectContext)_localctx).ID = match(ID);
+				((Column_selectContext)_localctx).cols.add(((Column_selectContext)_localctx).ID);
+				setState(37);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(32); match(COMMA);
-					setState(33); match(ID);
+					setState(33); match(COMMA);
+					setState(34); ((Column_selectContext)_localctx).ID = match(ID);
+					((Column_selectContext)_localctx).cols.add(((Column_selectContext)_localctx).ID);
 					}
 					}
-					setState(38);
+					setState(39);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
@@ -255,19 +267,19 @@ public class KnowSQLParser extends Parser {
 		Where_clauseContext _localctx = new Where_clauseContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_where_clause);
 		try {
-			setState(43);
-			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+			setState(44);
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(41); where_clause_exact();
+				setState(42); where_clause_exact();
 				}
 				break;
 
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(42); where_clause_range();
+				setState(43); where_clause_range();
 				}
 				break;
 			}
@@ -309,9 +321,9 @@ public class KnowSQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(45); match(ID);
-			setState(46); match(EQUALS);
-			setState(47); where_value();
+			setState(46); match(ID);
+			setState(47); match(EQUALS);
+			setState(48); where_value();
 			}
 		}
 		catch (RecognitionException re) {
@@ -357,11 +369,11 @@ public class KnowSQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(49); match(ID);
-			setState(50); match(BETWEEN);
-			setState(51); ((Where_clause_rangeContext)_localctx).where_from = where_value();
-			setState(52); match(AND);
-			setState(53); ((Where_clause_rangeContext)_localctx).where_to = where_value();
+			setState(50); match(ID);
+			setState(51); match(BETWEEN);
+			setState(52); ((Where_clause_rangeContext)_localctx).where_from = where_value();
+			setState(53); match(AND);
+			setState(54); ((Where_clause_rangeContext)_localctx).where_to = where_value();
 			}
 		}
 		catch (RecognitionException re) {
@@ -399,25 +411,25 @@ public class KnowSQLParser extends Parser {
 		Where_valueContext _localctx = new Where_valueContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_where_value);
 		try {
-			setState(58);
+			setState(59);
 			switch (_input.LA(1)) {
 			case INT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(55); match(INT);
+				setState(56); match(INT);
 				}
 				break;
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(56); match(STRING);
+				setState(57); match(STRING);
 				}
 				break;
 			case TRUE:
 			case FALSE:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(57); bool();
+				setState(58); bool();
 				}
 				break;
 			default:
@@ -459,7 +471,7 @@ public class KnowSQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60);
+			setState(61);
 			_la = _input.LA(1);
 			if ( !(_la==TRUE || _la==FALSE) ) {
 			_errHandler.recoverInline(this);
@@ -479,22 +491,22 @@ public class KnowSQLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\2\3\26A\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t"+
-		"\t\3\2\6\2\24\n\2\r\2\16\2\25\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4"+
-		"\3\4\3\4\3\4\7\4%\n\4\f\4\16\4(\13\4\5\4*\n\4\3\5\3\5\5\5.\n\5\3\6\3\6"+
-		"\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\5\b=\n\b\3\t\3\t\3\t\2\n"+
-		"\2\4\6\b\n\f\16\20\2\3\3\17\20>\2\23\3\2\2\2\4\31\3\2\2\2\6)\3\2\2\2\b"+
-		"-\3\2\2\2\n/\3\2\2\2\f\63\3\2\2\2\16<\3\2\2\2\20>\3\2\2\2\22\24\5\4\3"+
-		"\2\23\22\3\2\2\2\24\25\3\2\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26\27\3\2\2"+
-		"\2\27\30\7\1\2\2\30\3\3\2\2\2\31\32\7\3\2\2\32\33\5\6\4\2\33\34\7\4\2"+
-		"\2\34\35\7\21\2\2\35\36\7\5\2\2\36\37\5\b\5\2\37\5\3\2\2\2 *\7\t\2\2!"+
-		"&\7\21\2\2\"#\7\n\2\2#%\7\21\2\2$\"\3\2\2\2%(\3\2\2\2&$\3\2\2\2&\'\3\2"+
-		"\2\2\'*\3\2\2\2(&\3\2\2\2) \3\2\2\2)!\3\2\2\2*\7\3\2\2\2+.\5\n\6\2,.\5"+
-		"\f\7\2-+\3\2\2\2-,\3\2\2\2.\t\3\2\2\2/\60\7\21\2\2\60\61\7\r\2\2\61\62"+
-		"\5\16\b\2\62\13\3\2\2\2\63\64\7\21\2\2\64\65\7\6\2\2\65\66\5\16\b\2\66"+
-		"\67\7\7\2\2\678\5\16\b\28\r\3\2\2\29=\7\22\2\2:=\7\23\2\2;=\5\20\t\2<"+
-		"9\3\2\2\2<:\3\2\2\2<;\3\2\2\2=\17\3\2\2\2>?\t\2\2\2?\21\3\2\2\2\7\25&"+
-		")-<";
+		"\2\3\26B\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t"+
+		"\t\3\2\6\2\24\n\2\r\2\16\2\25\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\5\3 \n\3"+
+		"\3\4\3\4\3\4\3\4\7\4&\n\4\f\4\16\4)\13\4\5\4+\n\4\3\5\3\5\5\5/\n\5\3\6"+
+		"\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\5\b>\n\b\3\t\3\t\3\t"+
+		"\2\n\2\4\6\b\n\f\16\20\2\3\3\17\20@\2\23\3\2\2\2\4\31\3\2\2\2\6*\3\2\2"+
+		"\2\b.\3\2\2\2\n\60\3\2\2\2\f\64\3\2\2\2\16=\3\2\2\2\20?\3\2\2\2\22\24"+
+		"\5\4\3\2\23\22\3\2\2\2\24\25\3\2\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26\27"+
+		"\3\2\2\2\27\30\7\1\2\2\30\3\3\2\2\2\31\32\7\3\2\2\32\33\5\6\4\2\33\34"+
+		"\7\4\2\2\34\37\7\21\2\2\35\36\7\5\2\2\36 \5\b\5\2\37\35\3\2\2\2\37 \3"+
+		"\2\2\2 \5\3\2\2\2!+\7\t\2\2\"\'\7\21\2\2#$\7\n\2\2$&\7\21\2\2%#\3\2\2"+
+		"\2&)\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2*!\3\2\2\2*\"\3"+
+		"\2\2\2+\7\3\2\2\2,/\5\n\6\2-/\5\f\7\2.,\3\2\2\2.-\3\2\2\2/\t\3\2\2\2\60"+
+		"\61\7\21\2\2\61\62\7\r\2\2\62\63\5\16\b\2\63\13\3\2\2\2\64\65\7\21\2\2"+
+		"\65\66\7\6\2\2\66\67\5\16\b\2\678\7\7\2\289\5\16\b\29\r\3\2\2\2:>\7\22"+
+		"\2\2;>\7\23\2\2<>\5\20\t\2=:\3\2\2\2=;\3\2\2\2=<\3\2\2\2>\17\3\2\2\2?"+
+		"@\t\2\2\2@\21\3\2\2\2\b\25\37\'*.=";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

@@ -1,34 +1,13 @@
 package com.metadave.knowsql.parser;
 
-
-import java.util.List;
+import com.metadave.knowsql.RiakConnection;
+import com.metadave.knowsql.RiakResultSet;
+import com.metadave.knowsql.RiakStatement;
 
 public class EvalContext {
-    private String bucket;
-    private List<String> fields;
-    private IndexWhereClause whereClause;
 
-    public String getBucket() {
-        return bucket;
-    }
+    public RiakConnection conn;
+    public RiakStatement stmt;
+    public RiakResultSet rs;
 
-    public void setBucket(String bucket) {
-        this.bucket = bucket;
-    }
-
-    public List<String> getFields() {
-        return fields;
-    }
-
-    public void setFields(List<String> fields) {
-        this.fields = fields;
-    }
-
-    public IndexWhereClause getWhereClause() {
-        return whereClause;
-    }
-
-    public void setWhereClause(IndexWhereClause whereClause) {
-        this.whereClause = whereClause;
-    }
 }

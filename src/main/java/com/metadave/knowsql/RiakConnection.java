@@ -23,7 +23,7 @@ public class RiakConnection implements Connection {
         }
     }
     public Statement createStatement() throws SQLException {
-        return new RiakStatement();
+        return new RiakStatement(this);
     }
 
     public PreparedStatement prepareStatement(String sql) throws SQLException {
@@ -236,5 +236,13 @@ public class RiakConnection implements Connection {
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return false;
+    }
+
+    public IRiakClient getRiakClient() {
+        return riakClient;
+    }
+
+    public void setRiakClient(IRiakClient riakClient) {
+        this.riakClient = riakClient;
     }
 }

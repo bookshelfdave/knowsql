@@ -1,15 +1,20 @@
 package com.metadave.knowsql.parser;
 
 
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 public class KnowSQLWalker extends KnowSQLBaseListener {
     ParseTreeProperty<Object> values = new ParseTreeProperty<Object>();
-    EvalContext evalCtx;
+    EvalContext evalContext;
 
-    public KnowSQLWalker(EvalContext ev) {
-        this.evalCtx = ev;
+    public KnowSQLWalker(EvalContext evalContext) {
+        this.evalContext = evalContext;
     }
 
     public void setValue(ParseTree node, Object value) {
@@ -20,15 +25,20 @@ public class KnowSQLWalker extends KnowSQLBaseListener {
         return values.get(node);
     }
 
-
     @Override
     public void exitSelect(KnowSQLParser.SelectContext ctx) {
         System.out.println("exitSelect");
         IndexWhereClause wc = (IndexWhereClause)getValue(ctx.where_clause());
-        this.evalCtx.setBucket(ctx.bucket.getText());
-        this.evalCtx
-    }
+        System.out.println("Where clause = " + wc);
+        ColumnSelect cs = (ColumnSelect)getValue(ctx.column_select());
 
+        SelectContext selectCtx = new SelectContext();
+        selectCtx.setBucket(ctx.bucket.getText());
+        System.out.println("Bucket = " + selectCtx.getBucket());
+        selectCtx.setWhereClause(wc);
+        selectCtx.setColumnSelect(cs);
+        selectCtx.exec(this.evalContext);
+    }
 
     @Override
     public void exitWhere_value(KnowSQLParser.Where_valueContext ctx) {
@@ -48,7 +58,16 @@ public class KnowSQLWalker extends KnowSQLBaseListener {
 
     @Override
     public void exitColumn_select(KnowSQLParser.Column_selectContext ctx) {
-
+       if(ctx.SPLAT() != null) {
+           setValue(ctx,  new ColumnSelect());
+       } else {
+           List<String> cols = new ArrayList<String>();
+           for(Token t : ctx.cols) {
+               cols.add(t.getText());
+           }
+           ColumnSelect cs = new ColumnSelect();
+           cs.setColumns(cols);
+       }
     }
 
     @Override
@@ -67,6 +86,7 @@ public class KnowSQLWalker extends KnowSQLBaseListener {
         WhereClauseExactMatch match = new WhereClauseExactMatch();
         match.setIndex(ctx.ID().getText());
         match.setValue(getValue(ctx.where_value()));
+        setValue(ctx, match);
     }
 
     @Override

@@ -4,9 +4,9 @@ prog        :  (select)+ EOF;
 
 select: SELECT column_select
         FROM bucket=ID
-        WHERE  where_clause;
+        (WHERE  where_clause)?;
 
-column_select: (SPLAT | (ID (COMMA ID)*));
+column_select: (SPLAT | (cols+=ID (COMMA cols+=ID)*));
 
 where_clause: where_clause_exact | where_clause_range;
 
@@ -46,7 +46,7 @@ SEMI        :    ';';
 TRUE        :    'true';
 FALSE       :    'false';
 
-ID          :       [a-z][A-Za-z_]*;
+ID          :       [A-Za-z_]+;
 INT         :       [0-9]+;
 
 STRING  :  '"' (ESC|.)*? '"';

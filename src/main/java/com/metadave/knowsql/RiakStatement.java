@@ -1,11 +1,42 @@
 package com.metadave.knowsql;
 
 
+import com.metadave.knowsql.parser.EvalContext;
+import com.metadave.knowsql.parser.KnowSQLLexer;
+import com.metadave.knowsql.parser.KnowSQLParser;
+import com.metadave.knowsql.parser.KnowSQLWalker;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
 import java.sql.*;
 
 public class RiakStatement implements Statement {
+    RiakConnection conn;
+
+    public RiakStatement(RiakConnection conn) {
+        this.conn = conn;
+    }
+
     public ResultSet executeQuery(String sql) throws SQLException {
-        System.out.println("SQL = " + sql);
+        ANTLRInputStream input = new ANTLRInputStream(sql);
+        KnowSQLLexer lexer = new KnowSQLLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        KnowSQLParser parser = new KnowSQLParser(tokens);
+        EvalContext ec = new EvalContext();
+        ec.conn = conn;
+        KnowSQLWalker ksw = new KnowSQLWalker(ec);
+
+        // combine these two into one
+        //parser.addErrorListener(new ContactErrorListener(runtimeCtx));
+
+        ParseTreeWalker walker = new ParseTreeWalker();
+        try {
+            walker.walk(ksw, parser.prog());
+            return ec.rs;
+        } catch (Throwable t) {
+            // catch parse errors. ANTLR will display a message for me.
+        }
         return null;
     }
 
